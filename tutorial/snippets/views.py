@@ -8,6 +8,7 @@ from .models import Snippet
 from .serializers import SnippetSerializer, UserSerializer
 from .permissions import IsOwnerReadOnly
 
+
 class SnippetList(generics.ListCreateAPIView):
     """
     List all code snippets, or create new snippet
@@ -46,16 +47,16 @@ def api_root(request, format=None):
     # using reverse to return fully qualified urls
     return Response({
         'users':reverse('user-list',request=request, format=format),
-        'snippets':revers('snippet-list', request=request, format=format)
+        'snippets':reverse('snippet-list', request=request, format=format)
     })
 
 class SnippetHighlight(generics.GenericAPIView):
     """
     View for rendering a snippet object instance property
     """
-    quertset = Snippet.objects.all()
+    queryset = Snippet.objects.all()
     renderer_classes = (renderers.StaticHTMLRenderer,)
     
     def get(self, request, *args, **kwargs):
         snippet = self.get_object()
-        return Response(snippet.highlighted)
+        return Response(snippet)
