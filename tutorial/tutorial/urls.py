@@ -15,8 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from rest_framework.schemas import get_schema_view
+from snippets.views import SnippetViewSet, UserViewSet
 
+# create a router and register viewsets with it
+router = DefaultRouter()
+router.register(r'snippets', SnippetViewSet)
+router.register(r'users', UserViewSet)
+
+
+# API urls are now determined by the router
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('snippet/',include('snippets.urls'))
+    path('',include(router.urls)),
+    path('api-auth/', include('rest_framework.urls')),
+    path('schema/', get_schema_view(title='Pastebin API'))
 ]
